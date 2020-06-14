@@ -11,7 +11,7 @@ var AssetType = require('./routes/assettype')
 var Purpose = require('./routes/purposes')
 var EmployeeRole = require('./routes/employeeroles')
 var Department = require('./routes/departments')
-// var Employee = require('./routes/employees')
+var Employee = require('./routes/employees')
 // var Asset = require('./routes/assets')
 
 var Authenticate = require('./routes/authenticate')
@@ -32,7 +32,7 @@ app.use('/asset-type', passport.authenticate('jwt', {session: false}), AssetType
 app.use('/purposes', passport.authenticate('jwt', {session: false}), Purpose)
 app.use('/employee-roles', passport.authenticate('jwt', {session: false}), EmployeeRole)
 app.use('/departments', passport.authenticate('jwt', {session: false}), Department)
-// app.use('/employees', passport.authenticate('jwt', {session: false}), Employee)
+app.use('/employees', passport.authenticate('jwt', {session: false}), Employee)
 // app.use('/assets', passport.authenticate('jwt', {session: false}), Asset)
 
 app.listen(port, () => {
