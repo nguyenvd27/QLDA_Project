@@ -5,18 +5,18 @@
       <div class="container-fluid">
         <div class="row mb-2">
           <div class="col-sm-6">
-            <h1>{{$t('purposes')}} &nbsp;
+            <h1>Employee Role &nbsp;
               <button class="btn btn-success btn-sm" data-toggle="modal" data-target="#addModal" data-whatever="@mdo">
-                <i class="fas fa-plus"></i> {{$t('add')}}
+                <i class="fas fa-plus"></i> Add Role
               </button>
             </h1>
           </div>
           <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
               <li class="breadcrumb-item">
-                <router-link to="/">{{$t('home')}}</router-link>
+                <router-link to="/">Home</router-link>
               </li>
-              <li class="breadcrumb-item active">{{$t('purposes')}}</li>
+              <li class="breadcrumb-item active">employee-roles</li>
             </ol>
           </div>
         </div>
@@ -27,7 +27,7 @@
       <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
-            <h5 class="modal-title" id="addModalLabel">{{$t('new')}}</h5>
+            <h5 class="modal-title" id="addModalLabel">New Employee Role</h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
@@ -35,18 +35,18 @@
           <div class="modal-body">
             <form>
               <div class="form-group">
-                <label for="name-add" class="col-form-label">{{$t('name')}}: {{addObj.name}}</label>
+                <label for="name-add" class="col-form-label">Name: {{addObj.name}}</label>
                 <input type="text" class="form-control" id="name-add" required v-model="addObj.name">
               </div>
               <div class="form-group">
-                <label for="creator-email-add" class="col-form-label">{{$t('creatorEmail')}}: {{addObj.email}}</label>
-                <input type="text" class="form-control" id="creator-email-add" disabled v-model="addObj.email">
+                <label for="creator-email-add" class="col-form-label">Creator Email: {{addObj.email}}</label>
+                <input type="text" class="form-control" id="creator-email-add" required v-model="addObj.email">
               </div>
               <hr>
               <div class="float-right">
-                <button class="btn btn-secondary" data-dismiss="modal">{{$t('cancel')}}</button>
-                <button v-if="addObj.name==''" class="btn btn-primary">{{$t('add')}}</button>
-                <button v-else class="btn btn-primary" data-dismiss="modal" v-on:click="onAdd">{{$t('add')}}</button>
+                <button class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <button v-if="this.errors==0" class="btn btn-primary" data-dismiss="modal" v-on:click="onAdd()">Add</button>
+                <button v-else class="btn btn-primary" v-on:click="onAdd()">Add</button>
               </div>
             </form>
           </div>
@@ -62,9 +62,10 @@
               <div class="card">
                 <!-- card-header -->
                 <div class="card-header">
+                  <h3 class="card-title">Employee Role Table</h3>
                   <div class="card-tools">
                     <div class="input-group input-group-sm" style="width: 150px;">
-                      <input type="text" name="table_search" class="form-control float-right" :placeholder="$t('search')">
+                      <input type="text" name="table_search" class="form-control float-right" placeholder="Search">
                       <div class="input-group-append">
                         <button type="submit" class="btn btn-default">
                           <i class="fas fa-search"></i>
@@ -75,19 +76,20 @@
                 </div>
                 <!-- card-body -->
                 <div class="card-body table-responsive p-0">
-                  <table class="table table-bordered table-hover text-nowrap">
+                  <table class="table table-hover text-nowrap">
                     <thead>
                       <tr>
                         <th >#</th>
+                        <!-- <th >ID</th> -->
                         <th >ID</th>
-                        <th >{{$t('name')}}</th>
-                        <th >{{$t('creatorEmail')}}</th>
-                        <th >{{$t('created')}}</th>
-                        <th >{{$t('action')}}</th>
+                        <th >Name</th>
+                        <th >Creator Email</th>
+                        <th >Created At</th>
+                        <th >Action</th>
                       </tr>
                     </thead>
                     <tbody>
-                      <tr v-for="(item, index) in purposes" :key="index">
+                      <tr v-for="(item, index) in employeeRoles" :key="index">
                         <th scope="row">{{index}}</th>
                         <td>{{item.id}}</td>
                         <td>{{item.name}}</td>
@@ -124,7 +126,7 @@
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="updateModalLabel">{{$t('edit')}}</h5>
+                        <h5 class="modal-title" id="updateModalLabel">Edit Asset Type</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
@@ -136,22 +138,22 @@
                             <input type="text" class="form-control" id="id-update" disabled v-model="updateObj.id">
                           </div>
                           <div class="form-group">
-                            <label for="name" class="col-form-label">{{$t('name')}}:</label>
+                            <label for="name" class="col-form-label">Name:</label>
                             <input type="text" class="form-control" id="name" v-model="updateObj.name">
                           </div>
                           <div class="form-group">
-                            <label for="creator-email" class="col-form-label">{{$t('creatorEmail')}}:</label>
-                            <input type="text" class="form-control" id="creator-email" disabled v-model="updateObj.email">
+                            <label for="creator-email" class="col-form-label">Creator Email:</label>
+                            <input type="text" class="form-control" id="creator-email" v-model="updateObj.email">
                           </div>
                           <div class="form-group">
-                            <label for="created-at" class="col-form-label">{{$t('created')}}:</label>
+                            <label for="created-at" class="col-form-label">Created At:</label>
                             <input type="text" class="form-control" id="created-at" disabled v-model="updateObj.created">
                           </div>
                         </form>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">{{$t('cancel')}}</button>
-                        <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="onUpdate()">{{$t('update')}}</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" v-on:click="onUpdate()">Update</button>
                       </div>
                     </div>
                   </div>
@@ -161,14 +163,14 @@
                   <div class="modal-dialog" role="document">
                     <div class="modal-content">
                       <div class="modal-header">
-                        <h5 class="modal-title" id="deleteModalLabel">{{$t('deleteMsg')}}</h5>
+                        <h5 class="modal-title" id="deleteModalLabel">Are you sure you want to delete ?</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                           <span aria-hidden="true">&times;</span>
                         </button>
                       </div>
                       <div class="modal-footer">
-                        <button type="button" class="btn btn-light" data-dismiss="modal">{{$t('cancel')}}</button>
-                        <button type="button" class="btn btn-danger" data-dismiss="modal" v-on:click="onDelete()" >{{$t('delete')}}</button>
+                        <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-danger" data-dismiss="modal" v-on:click="onDelete()" >Delete</button>
                       </div>
                     </div>
                   </div>
@@ -183,57 +185,61 @@
 </template>
 
 <script>
-import axios from '../../callApi/Api';
+import axios from "../../callApi/Api";
+import EventBus from "../EventBus";
 
-import jwtDecode from 'jwt-decode'
-import VueCookie from 'vue-cookie'
 export default {
-  data (){
-    const token = VueCookie.get('usertoken')
-    const decoded = jwtDecode(token)
+  data() {
     return {
-      purposes: [],
-      addObj: {
-        name: '',
-        email: decoded.email
-      },
+      employeeRoles: [],
+      addObj: {},
       updateObj: {},
       deleteObj: {},
       errors: 0
-    }
+    };
   },
   methods: {
     onAdd() {
-      axios
-      .post("/purposes", {
-        name: this.addObj.name,
-        email: this.addObj.email
-      })
-      .then(res => {
-        this.purposes.push(res.data.data);
-        this.addObj.name = '';
-      });
+      this.errors = 0;
+      if (this.addObj.name == "" || this.addObj.name == null) {
+        this.errors++;
+      }
+      if (this.addObj.email == "" || this.addObj.email == null) {
+        this.errors++;
+      }
+      if(this.errors == 0){
+        axios
+        .post("/employee-roles", {
+          name: this.addObj.name,
+          email: this.addObj.email
+        })
+        .then(res => {
+          this.employeeRoles.push(res.data.data);
+          this.addObj = {};
+        });
+      }
     },
     onUpdate() {
       axios
-        .put("/purposes/" + this.updateObj.id, {
+        .put("/employee-roles/" + this.updateObj.id, {
           name: this.updateObj.name,
           email: this.updateObj.email
         })
         .then(res => {
-          for (let i = 0; i < this.purposes.length; i++) {
-            if (this.purposes[i].id == this.updateObj.id) {
-              this.purposes[i] = this.updateObj;
+          for (let i = 0; i < this.employeeRoles.length; i++) {
+            if (this.employeeRoles[i].id == this.updateObj.id) {
+              this.employeeRoles[i] = this.updateObj;
             }
           }
           this.updateObj = {};
         });
     },
+
     onDelete() {
-      axios.delete("/purposes/" + this.deleteObj.id).then(response => {
-        for(let i = 0; i < this.purposes.length; i++){
-          if(this.purposes[i].id == this.deleteObj.id){
-            this.purposes.splice(i, 1)
+      axios.delete("/employee-roles/" + this.deleteObj.id).then(response => {
+        for(let i = 0; i < this.employeeRoles.length; i++){
+          if(this.employeeRoles[i].id == this.deleteObj.id){
+            this.employeeRoles.splice(i, 1)
           }
         }
         this.deleteObj = {}
@@ -242,19 +248,14 @@ export default {
   },
   mounted() {
     axios
-      .get("/purposes")
+      .get("/employee-roles")
       .then(response => {
-        this.purposes = response.data.data;
+        console.log(response.data.data);
+        this.employeeRoles = response.data.data;
       })
       .catch(error => {
         console.log(error);
       });
   }
-}
+};
 </script>
-
- <style>
-.far:hover {
-  cursor: pointer;
-}
- </style>
