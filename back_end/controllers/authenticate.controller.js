@@ -12,33 +12,16 @@ module.exports.authenticate = (req, res) => {
   const session = Session.findOne({
     where: {token: token}
   }).then(session => {
-    // console.log('aaaaaaaaaaaaaa'+session)
     if(!session){
       res.json({
         message: 'false'
       })
     }
     else{
-      // console.log(token)
       const decoded = jwtDecode(token)
-      // console.log(decoded)
       res.json({
         message: 'true'
       })
     }
   })
-  // console.log('aaaaaaaaaaaaaa'+session)
-  // if(!session){
-  //   res.json({
-  //     message: 'false'
-  //   })
-  // }
-  // else{
-  //   console.log(token)
-  //   const decoded = jwtDecode(token)
-  //   console.log(decoded)
-  //   res.json({
-  //     message: 'ok'
-  //   })
-  // }
 }

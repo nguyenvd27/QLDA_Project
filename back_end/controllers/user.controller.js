@@ -6,6 +6,24 @@ const bcrypt = require('bcrypt')
 
 process.env.SECRET_KEY = 'secret'
 
+module.exports.isAdmin = (req, res, next) => {
+  // console.log('email: ', req.body.email)
+  User.findOne({
+    where: {
+      email: req.body.email
+    }
+  })
+  .then( data => {
+    // console.log('day la isAdmin: ', data)
+    if(data.dataValues.admin == '1' || data.dataValues.admin == 1){
+      next()
+    }else {
+      console.log('user is not admin!!!')
+      res.json({ error: 'user is not admin' })
+    }
+  })
+}
+
 module.exports.register = (req, res) => {
   const today = new Date()
   const userData = {
@@ -29,7 +47,7 @@ module.exports.register = (req, res) => {
               res.json({ status: user.email + ' Registered!' })
             })
             .catch(err => {
-              res.send('error: ' + err)
+              res.json({ error: 'Error '+err })
             })
         })
       } else {
@@ -37,7 +55,7 @@ module.exports.register = (req, res) => {
       }
     })
     .catch(err => {
-      res.send('error: ' + err)
+      res.json({ error: 'Error '+err })
     })
 }
 
@@ -110,7 +128,6 @@ module.exports.facebookOAuth = (req, res) => {
     picture: req.body.picture
   }
   
-  console.log('user '+user)
   let token = jwt.sign(user, process.env.SECRET_KEY, {
     expiresIn: '1h'
   })
@@ -118,7 +135,7 @@ module.exports.facebookOAuth = (req, res) => {
   Session.findAll()
   .then(sessions => {
     let checkExist = 0;
-    console.log('Ssession' +sessions)
+    // console.log('Ssession' +sessions)
     // save in sessions table
     sessions.forEach( session => {
       if(session.email == req.body.email){
@@ -126,7 +143,7 @@ module.exports.facebookOAuth = (req, res) => {
       }
     })
 
-    console.log('checkExist '+checkExist)
+    // console.log('checkExist '+checkExist)
     if(checkExist == 0){
       Session.create({
         id_user: req.body.id,

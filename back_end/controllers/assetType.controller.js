@@ -26,8 +26,6 @@ module.exports.create = (req, res) => {
         created: today
     }
 
-    console.log(assetTypeData)
-
     AssetType.findOne({
         where: {
             name: req.body.name
@@ -93,22 +91,22 @@ module.exports.delete = (req, res) => {
             id: id
         }
     })
-        .then(data => {
-            if (data > 0) {
-                res.json({
-                    result: 'ok',
-                    data: data,
-                    message: `Delete successfully`
-                });
-            } else {
-                res.json({
-                    result: 'failed',
-                    data: data,
-                    message: `Delete failed`
-                });
-            }
-        })
-        .catch(err => {
-            res.send('error: ' + err)
-        })
+    .then(data => {
+        if (data > 0) {
+            res.json({
+                result: 'ok',
+                data: data,
+                message: `Delete successfully`
+            });
+        } else {
+            res.json({
+                result: 'failed',
+                data: data,
+                message: `Delete failed`
+            });
+        }
+    })
+    .catch(err => {
+        res.send('error: ' + err)
+    })
 }

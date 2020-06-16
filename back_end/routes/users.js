@@ -1,11 +1,7 @@
 const express = require('express')
 const passport = require('passport')
 const users = express.Router()
-// const cors = require('cors')
 
-// users.use(cors())
-
-// const passport = require('passport')
 const controller = require('../controllers/user.controller')
 const passportConf = require('../passport')
 
